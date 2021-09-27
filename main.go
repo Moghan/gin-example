@@ -14,15 +14,24 @@ import (
 	"github.com/urfave/cli"
 )
 
-func getAllFeatures(c *gin.Context) {
-
+func initializeAwsConfig() aws.Config {
 	cfg, err := config.LoadDefaultConfig(context.TODO())
-    if err != nil {
+	if err != nil {
         log.Fatalf("unable to load SDK config, %v", err)
     }
+	return cfg
+}
+
+func initializeDynamoDB(cfg aws.Config) *dynamodb.Client {
+	return dynamodb.NewFromConfig(cfg)
+}
+
+func getAllFeatures(c *gin.Context) {
+
+	cfg := initializeAwsConfig()
 
     // Using the Config value, create the DynamoDB client
-    svc := dynamodb.NewFromConfig(cfg)
+    svc := initializeDynamoDB(cfg)
 
     // Build the request with its input parameters
     resp, err := svc.ListTables(context.TODO(), &dynamodb.ListTablesInput{
