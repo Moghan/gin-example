@@ -28,10 +28,8 @@ func initializeDynamoDB(cfg aws.Config) *dynamodb.Client {
 
 func getAllFeatures(c *gin.Context) {
 
-	cfg := initializeAwsConfig()
-
     // Using the Config value, create the DynamoDB client
-    svc := initializeDynamoDB(cfg)
+    svc := InitializeService()
 
     // Build the request with its input parameters
     resp, err := svc.ListTables(context.TODO(), &dynamodb.ListTablesInput{
